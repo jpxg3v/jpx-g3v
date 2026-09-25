@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orbit — Test Website</title>
+  <style>
+    :root {
+      --bg: #090d19;
+      --accent: #a3ffcb;
+      --secondary: #7b8cff;
+      --text: #f3f5ff;
+      --muted: #a5aec7;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, sans-serif;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse at 80% 25%, #7b8cff18, transparent 50%),
+        linear-gradient(#ffffff04 1px, transparent 1px),
+        linear-gradient(90deg, #ffffff04 1px, transparent 1px);
+      background-size: auto, 64px 64px, 64px 64px;
+      z-index: -1;
+    }
+
+    .container {
+      width: min(1120px, 90%);
+      margin: auto;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 0;
+      border-bottom: 1px solid #ffffff15;
+    }
+
+    .logo {
+      font-size: 23px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .logo span { color: var(--accent); }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 14px var(--accent);
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      align-items: center;
+      gap: 40px;
+      padding: 90px 0 70px;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    h1 {
+      font-size: clamp(48px, 6.5vw, 82px);
+      line-height: 1.03;
+      letter-spacing: -4px;
+      margin: 24px 0;
+    }
+
+    h1 span {
+      color: var(--accent);
+    }
+
+    .intro {
+      max-width: 430px;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.8;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 15px 22px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: var(--accent);
+      color: #090d19;
+      font: inherit;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform .2s, background .2s;
+    }
+
+    .button:hover { transform: translateY(-3px); }
+
+    .button.secondary {
+      background: #ffffff06;
+      border-color: #ffffff22;
+      color: var(--text);
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--secondary);
+      outline-offset: 5px;
+    }
+
+    .art {
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-height: 420px;
+      isolation: isolate;
+    }
+
+    .halo {
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      background: var(--secondary);
+      filter: blur(95px);
+      opacity: .22;
+      z-index: -1;
+    }
+
+    .planet {
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 30% 25%, #fff9, transparent 30%),
+        radial-gradient(circle at 30% 30%, var(--accent), var(--secondary) 55%, #151732 85%);
+      box-shadow:
+        inset -25px -20px 45px #0008,
+        0 0 70px #7b8cff30;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .ring {
+      position: absolute;
+      width: 380px;
+      height: 380px;
+      border: 1px solid #ffffff28;
+      border-radius: 50%;
+      transform: rotate(-30deg) scaleY(.55);
+    }
+
+    .ring.two {
+      width: 440px;
+      height: 440px;
+      transform: rotate(45deg) scaleY(.65);
+      border-style: dashed;
+      opacity: .45;
+    }
+
+    .floating-label {
+      position: absolute;
+      right: 0;
+      bottom: 48px;
+      padding: 16px 20px;
+      border: 1px solid #ffffff20;
+      background: #131b2ddd;
+      backdrop-filter: blur(16px);
+      border-radius: 14px;
+      box-shadow: 0 18px 45px #0004;
+      font-size: 13px;
+    }
+
+    .floating-label span {
+      display: block;
+      color: var(--accent);
+      margin-top: 5px;
+      font-weight: 700;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      padding-bottom: 65px;
+    }
+
+    .card {
+      padding: 28px;
+      border-radius: 18px;
+      border: 1px solid #ffffff15;
+      background: linear-gradient(145deg, #ffffff08, #ffffff02);
+      transition: transform .2s, border-color .2s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent);
+    }
+
+    .icon {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: #ffffff09;
+      color: var(--accent);
+      font-size: 22px;
+    }
+
+    .card h2 { font-size: 18px; margin-top: 22px; }
+
+    .card p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 0;
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 24px 0;
+      border-top: 1px solid #ffffff15;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    @keyframes float {
+      50% { transform: translateY(-15px); }
+    }
+
+    @media (max-width: 760px) {
+      main {
+        grid-template-columns: 1fr;
+        padding-top: 55px;
+        gap: 10px;
+      }
+
+      h1 { letter-spacing: -2px; }
+      .art { min-height: 360px; }
+      .ring { width: 300px; height: 300px; }
+      .ring.two { width: 320px; height: 320px; }
+      .features { grid-template-columns: 1fr; }
+      footer { flex-wrap: wrap; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav aria-label="Main navigation">
+      <a href="#" class="logo">orbit<span>↗</span></a>
+      <div class="status">
+        <span class="dot" aria-hidden="true"></span>
+        A little space to experiment
+      </div>
+    </nav>
+
+    <main>
+      <section>
+        <div class="eyebrow">Your next idea starts here</div>
+        <h1>Small site.<br><span>Big possibilities.</span></h1>
+        <p class="intro">
+          A playground for bold ideas, late-night experiments,
+          and things you haven’t tried yet. Make yourself at home.
+        </p>
+        <div class="actions">
+          <a class="button" href="#features">Explore the site ↗</a>
+          <button
+            class="button secondary"
+            id="theme-button"
+            type="button"
+            aria-pressed="false"
+          >Switch colours ◐</button>
+        </div>
+      </section>
+
+      <div class="art" role="img" aria-label="Glowing green and purple planet with orbital rings">
+        <div class="halo"></div>
+        <div class="ring"></div>
+        <div class="planet"></div>
+        <div class="ring two"></div>
+        <div class="floating-label">
+          Hello, world.
+          <span>Ready for your next idea ✦</span>
+        </div>
+      </div>
+    </main>
+
+    <section class="features" id="features" aria-label="Site features">
+      <article class="card">
+        <div class="icon" aria-hidden="true">↗</div>
+        <h2>Keep it simple</h2>
+        <p>One HTML file. No installations or complicated setup. Just open it and start exploring.</p>
+      </article>
+      <article class="card">
+        <div class="icon" aria-hidden="true">◇</div>
+        <h2>Looks good anywhere</h2>
+        <p>A flexible layout that feels at home on your phone, tablet, and desktop.</p>
+      </article>
+      <article class="card">
+        <div class="icon" aria-hidden="true">✦</div>
+        <h2>Make it yours</h2>
+        <p>Change the colours, rewrite the words, and turn this little experiment into something personal.</p>
+      </article>
+    </section>
+
+    <footer>
+      <span>© <span id="year"></span> Orbit. Built for curiosity.</span>
+      <span>Made with HTML, CSS & a little imagination.</span>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    const button = document.getElementById("theme-button");
+    let alternate = false;
+
+    button.addEventListener("click", () => {
+      alternate = !alternate;
+      const style = document.documentElement.style;
+      style.setProperty("--accent", alternate ? "#ffd095" : "#a3ffcb");
+      style.setProperty("--secondary", alternate ? "#ff79ab" : "#7b8cff");
+      button.setAttribute("aria-pressed", String(alternate));
+      document.querySelector(".art").setAttribute(
+        "aria-label",
+        alternate
+          ? "Glowing peach and pink planet with orbital rings"
+          : "Glowing green and purple planet with orbital rings"
+      );
+    });
+  </script>
+</body>
+</html>
